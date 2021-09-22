@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 import './app.scss';
 
@@ -14,13 +15,17 @@ const App = () => {
   const [url, setUrl] = useState('');
   const [data, setData] = useState('');
 
-  const callApi = async () => {
+  const callApi = async (e) => {
+    e.preventDefault();
     let requestParams = {
-      //feed in url and method
+      method: method,
+      url: url,
+      data: {
+        property: 'value',
+      },
     };
     let data = await axios(requestParams);
-
-    //pipe data into results component
+    setData(data.data);
   };
 
   return (
