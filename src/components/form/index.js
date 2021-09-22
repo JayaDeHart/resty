@@ -3,57 +3,69 @@ import React, { useState } from 'react';
 import './form.scss';
 
 const Form = (props) => {
-  const { callApi, setUrl, changeMethod, url } = props;
+  const [formData, setFormData] = useState({});
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    //take each form's input and update state object
+  }
+
+  function handleSubmit(e) {
+    //todo: validate formdata
+    e.preventDefault();
+    props.handleSubmit(formData);
+  }
+
+  //onclick={changemethod()}
 
   return (
     <>
-      <form onSubmit={callApi}>
+      <form onSubmit={handleSubmit}>
         <label>
           <span>URL: </span>
-          <input
-            name="url"
-            type="text"
-            onChange={(e) => {
-              setUrl(e.target.value);
-            }}
-            value={url}
-          />
+          <input name="url" type="text" onChange={handleChange} />
           <button type="submit">GO!</button>
         </label>
-        <label className="methods">
-          <span
-            onClick={(e) => {
-              changeMethod(e.target.id);
-            }}
-            id="get"
-          >
-            GET
-          </span>
-          <span
-            onClick={(e) => {
-              changeMethod(e.target.id);
-            }}
-            id="post"
-          >
-            POST
-          </span>
-          <span
-            onClick={(e) => {
-              changeMethod(e.target.id);
-            }}
-            id="put"
-          >
-            PUT
-          </span>
-          <span
-            onClick={(e) => {
-              changeMethod(e.target.id);
-            }}
-            id="delete"
-          >
-            DELETE
-          </span>
-        </label>
+        <div>
+          <label className="methods">
+            <input
+              type="radio"
+              name="method"
+              value="get"
+              onChange={handleChange}
+            />
+            <span>GET</span>
+          </label>
+          <label className="methods">
+            <input
+              type="radio"
+              name="method"
+              value="post"
+              onChange={handleChange}
+            />
+            <span>POST</span>
+          </label>
+          <label className="methods">
+            <input
+              type="radio"
+              name="method"
+              value="put"
+              onChange={handleChange}
+            />
+            <span>PUT</span>
+          </label>
+          <label className="methods">
+            <input
+              type="radio"
+              name="method"
+              value="delete"
+              onChange={handleChange}
+            />
+            <span>DELETE</span>
+          </label>
+        </div>
       </form>
     </>
   );

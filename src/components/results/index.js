@@ -1,11 +1,10 @@
 import React from 'react';
 import './results.scss';
+import ReactJson from 'react-json-view';
 
 const Results = (props) => {
   return (
-    <section>
-      <pre>{props.data ? JSON.stringify(props.data, undefined, 2) : null}</pre>
-    </section>
+    <section>{props.data ? <ReactJson src={props.data} /> : null}</section>
   );
 };
 

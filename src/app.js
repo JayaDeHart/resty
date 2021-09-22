@@ -13,19 +13,12 @@ import Results from './components/results';
 const App = () => {
   const [method, setMethod] = useState('');
   const [url, setUrl] = useState('');
+  const [body, setBody] = useState('');
   const [data, setData] = useState('');
 
-  const callApi = async (e) => {
-    e.preventDefault();
-    let requestParams = {
-      method: method,
-      url: url,
-      data: {
-        property: 'value',
-      },
-    };
-    let data = await axios(requestParams);
-    setData(data.data);
+  const callApi = async (requestParams) => {
+    let response = await axios(requestParams);
+    setData(response.data);
   };
 
   return (
@@ -33,12 +26,7 @@ const App = () => {
       <Header />
       <div>Request Method: {method} </div>
       <div>URL: {url} </div>
-      <Form
-        callApi={callApi}
-        setUrl={setUrl}
-        changeMethod={setMethod}
-        url={url}
-      />
+      <Form handleSubmit={callApi} />
       <Results data={data} />
       <Footer />
     </React.Fragment>
