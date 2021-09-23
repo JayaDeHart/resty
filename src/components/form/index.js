@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import './form.scss';
 
@@ -8,17 +8,12 @@ const Form = (props) => {
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
-    //take each form's input and update state object
   }
 
   function handleSubmit(e) {
-    //todo: validate formdata
     e.preventDefault();
     props.handleSubmit(formData);
   }
-
-  //onclick={changemethod()}
 
   return (
     <>
@@ -30,13 +25,13 @@ const Form = (props) => {
         </label>
         <div>
           <label className="methods">
+            <span>GET</span>
             <input
               type="radio"
               name="method"
               value="get"
               onChange={handleChange}
             />
-            <span>GET</span>
           </label>
           <label className="methods">
             <input
