@@ -2,22 +2,25 @@ $backgroundColor: #efefef;
 $radius: 40%;
 
 form {
-  display: inline-block;
   margin: auto;
   width: 200px;
 
-  label {
+  div {
     display: flex;
     margin: 1rem 0;
 
-    &.methods {
+    label {
+      input {
+        display: none;
+      }
       span {
         cursor: pointer;
         margin-right: 1rem;
-        padding: .25rem .5rem;
+        padding: 0.25rem 0.5rem;
         background: #ccc;
 
-        &:hover, &.active {
+        &:hover,
+        &.active {
           background: #fff;
         }
       }

@@ -2,46 +2,32 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 import './app.scss';
-
-// Let's talk about using index.js and some other name in the component folder
-// There's pros and cons for each way of doing this ...
 import Header from './components/header';
 import Footer from './components/footer';
 import Form from './components/form';
 import Results from './components/results';
+import History from './components/history';
 
 const App = () => {
-  const [method, setMethod] = useState('');
-  const [url, setUrl] = useState('');
-  const [data, setData] = useState('');
+  const [data, setData] = useState();
+  const [history, setHistory] = useState([]);
 
-  const callApi = async (e) => {
-    e.preventDefault();
-    let requestParams = {
-      method: method,
-      url: url,
-      data: {
-        property: 'value',
-      },
-    };
-    let data = await axios(requestParams);
-    setData(data.data);
+  const callApi = async (requestParams, origin) => {
+    let response = await axios(requestParams);
+    setData(response.data);
+    if (origin == 'form') {
+      setHistory([...history, requestParams]);
+    }
   };
 
   return (
-    <React.Fragment>
+    <div>
       <Header />
-      <div>Request Method: {method} </div>
-      <div>URL: {url} </div>
-      <Form
-        callApi={callApi}
-        setUrl={setUrl}
-        changeMethod={setMethod}
-        url={url}
-      />
+      <History history={history} handleSubmit={callApi} />
+      <Form handleSubmit={callApi} />
       <Results data={data} />
       <Footer />
-    </React.Fragment>
+    </div>
   );
 };
 
