@@ -1,18 +1,66 @@
-import React, { useState, useEffect } from 'react';
-
+import React, { useState, useEffect, useReducer } from 'react';
 import './form.scss';
 
-const Form = (props) => {
-  const [formData, setFormData] = useState({});
+const initialState = {
+  method: 'get',
+  url: '',
+  data: '{}',
+};
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+function formReducer(state = initialState, action) {
+  let { type, payload } = action;
+
+  switch (type) {
+    case 'SET_METHOD':
+      return { ...state, method: payload };
+    case 'SET_URL':
+      return {
+        ...state,
+        url: payload,
+      };
+    case 'SET_BODY':
+      return {
+        ...state,
+        data: payload,
+      };
+    default:
+      return state;
+  }
+}
+
+const Form = (props) => {
+  const [state, dispatch] = useReducer(formReducer, initialState);
+
+  function handleMethodChange(e) {
+    e.preventDefault();
+    let action = {
+      type: 'SET_METHOD',
+      payload: e.target.value,
+    };
+    dispatch(action);
+  }
+
+  function handleUrlChange(e) {
+    e.preventDefault();
+    let action = {
+      type: 'SET_URL',
+      payload: e.target.value,
+    };
+    dispatch(action);
+  }
+
+  function handleBodyChange(e) {
+    e.preventDefault();
+    let action = {
+      type: 'SET_BODY',
+      payload: e.target.value,
+    };
+    dispatch(action);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    props.handleSubmit(formData);
+    props.handleSubmit(state, 'form');
   }
 
   return (
@@ -20,47 +68,44 @@ const Form = (props) => {
       <form onSubmit={handleSubmit}>
         <label>
           <span>URL: </span>
-          <input name="url" type="text" onChange={handleChange} />
-          <button type="submit">GO!</button>
+          <input
+            data-testid="url-input"
+            name="url"
+            type="text"
+            onChange={handleUrlChange}
+          />
+          <button data-testid="submit-button" type="submit">
+            GO!
+          </button>
         </label>
         <div>
-          <label className="methods">
-            <span>GET</span>
-            <input
-              type="radio"
-              name="method"
-              value="get"
-              onChange={handleChange}
-            />
-          </label>
-          <label className="methods">
-            <input
-              type="radio"
-              name="method"
-              value="post"
-              onChange={handleChange}
-            />
-            <span>POST</span>
-          </label>
-          <label className="methods">
-            <input
-              type="radio"
-              name="method"
-              value="put"
-              onChange={handleChange}
-            />
-            <span>PUT</span>
-          </label>
-          <label className="methods">
-            <input
-              type="radio"
-              name="method"
-              value="delete"
-              onChange={handleChange}
-            />
-            <span>DELETE</span>
-          </label>
+          <input
+            type="button"
+            name="method"
+            value="get"
+            onClick={handleMethodChange}
+          />
+          <input
+            type="button"
+            name="method"
+            value="post"
+            onClick={handleMethodChange}
+          />
+          <input
+            type="button"
+            name="method"
+            value="put"
+            onClick={handleMethodChange}
+          />
+          <input
+            type="button"
+            name="method"
+            value="delete"
+            onClick={handleMethodChange}
+          />
         </div>
+        <label>JSON body</label>
+        <textarea cols={50} name="body" onChange={handleBodyChange} />
       </form>
     </>
   );
